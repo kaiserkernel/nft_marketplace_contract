@@ -16,8 +16,9 @@ export default {
     }
   },
   networks: {
-    sepo: {
-      url: "http://127.0.0.1:8545",
+    hardhat: {},  // Local Hardhat network
+    testnet: {
+      url: "https://data-seed-prebsc-1-s1.binance.org:8545", // BSC Testnet RPC
       accounts: [process.env.PRIVATE_KEY]
     }
   }

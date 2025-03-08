@@ -66,8 +66,26 @@ Hardhart provides local environment to test smart contract. For example it provi
 
 ## Step 4 - Deploy smart contract
 
-Try this command
+### Deploy on testnet
+#### First, start a local Ethereum blockchain for development and testing purposes. It is part of the Hardhat development environment for smart contracts.
 
+Try this command
+```shell
+npx hardhat node
+```
+- Starts a local Ethereum network that mimics a real blockchain.
+- Provides pre-funded accounts for testing.
+- Saves state, so transactions persist as long as it's running.
+
+#### Next deploy contract by using ignition
+
+Try this command
+```shell
+npx hardhat ignition deploy ignition/modules/NFT.js --network localhost
+```
+
+### Deploy real net
+Try this command
 ```shell
 npx hardhat run
 ```

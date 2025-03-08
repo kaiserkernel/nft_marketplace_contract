@@ -9,30 +9,47 @@ contract NFTFactory {
         address collectionAddress,
         string name,
         string symbol,
-        string description,
-        string image,
-        string avatar,
-        uint256 royalty
+        string metadataURI,
     );
+
+    struct CollectionInfo {
+        address owner;
+        address collectionAddress;
+        string name;
+        string symbol;
+        string metadataURI;
+    }
+
+    CollectionInfo[] public collections;
 
     function createCollection(
         string memory name,
         string memory symbol,
-        string memory description,
-        string memory image,
-        string memory avatar,
-        uint256 royalty
+        string memory metadataURI,
     ) external {
         NFTCollection newCollection = new NFTCollection(
             name,
             symbol,
-            description,
-            image,
-            avatar,
-            royalty,
+            metadataURI,
             msg.sender
         );
 
-        emit CollectionCreated(msg.sender, address(newCollection), name, symbol, description, image, avatar, royalty);
+        collections.push(CollectionInfo({
+            owner: msg.sender,
+            collectionAddress: address(newCollection),
+            name: name,
+            symbol: symbol,
+            metadataURI: metadataURI
+        }));
+
+        emit CollectionCreated(msg.sender, address(newCollection), name, symbol, metadataURI);
+    }
+
+    function getAllCollections() external view returns (CollectionInfo[] memory) {
+        return collections;
+    }
+
+    function getCollectionCount() external view returns (uint256) {
+        return collections.length;
     }
 }

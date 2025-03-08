@@ -9,26 +9,17 @@ contract NFTCollection is ERC721URIStorage, Ownable {
     string private _baseTokenURI;
 
     // Collection Metadata
-    string public collectionDescription;
-    string public collectionImage;
-    string public collectionAvatar;
-    uint256 public royaltyPercentage; // In basis points (e.g., 500 = 5%)
+    string public metadataURI;
 
     event NFTMinted(address indexed owner, uint256 indexed tokenId, string tokenURI);
 
     constructor(
         string memory name,
         string memory symbol,
-        string memory description,
-        string memory image,
-        string memory avatar,
-        uint256 royalty,
+        string memory _metadataURI,
         address creator
     ) ERC721(name, symbol) Ownable(creator) {
-        collectionDescription = description;
-        collectionImage = image;
-        collectionAvatar = avatar;
-        royaltyPercentage = royalty;
+        metadataURI = _metadataURI;
     }
 
     function mintNFT(address recipient, string memory tokenURI) public {
