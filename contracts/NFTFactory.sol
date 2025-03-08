@@ -9,7 +9,7 @@ contract NFTFactory {
         address collectionAddress,
         string name,
         string symbol,
-        string metadataURI,
+        string metadataURI
     );
 
     struct CollectionInfo {
@@ -25,7 +25,7 @@ contract NFTFactory {
     function createCollection(
         string memory name,
         string memory symbol,
-        string memory metadataURI,
+        string memory metadataURI
     ) external {
         NFTCollection newCollection = new NFTCollection(
             name,
