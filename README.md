@@ -81,8 +81,16 @@ npx hardhat node
 
 Try this command
 ```shell
-npx hardhat ignition deploy ignition/modules/NFT.js --network localhost
+npx hardhat ignition deploy ignition/modules/NFT.js --network <network_name>
 ```
+If a version of the contract has already been deployed on that __network__.
+
+Try this command
+```shell
+npx hardhat ignition deploy ignition/modules/NFT.js --network <network_name> --rest
+```
+
+About the network name, you can retrieve that from harthat.config.js file.
 
 ### Deploy real net
 Try this command

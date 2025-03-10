@@ -22,7 +22,7 @@ contract NFTCollection is ERC721URIStorage, Ownable {
         metadataURI = _metadataURI;
     }
 
-    function mintNFT(address recipient, string memory tokenURI) public {
+    function mintNFT(address recipient, string memory tokenURI) public onlyOwner {
         uint256 tokenId = _tokenIds++;
         _mint(recipient, tokenId);
         _setTokenURI(tokenId, tokenURI);
