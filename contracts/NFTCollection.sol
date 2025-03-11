@@ -28,7 +28,7 @@ contract NFTCollection is ERC721URIStorage, Ownable {
     // Auction start and end time
     mapping(uint256 => uint256) private _auctionEndTime;
 
-    event NFTMinted(address indexed owner, uint256 indexed tokenId, string tokenURI, uint256 royalty);
+    event NFTMinted(address indexed owner, uint256 indexed tokenId, string tokenURI, uint256 royalty, address collectionAddress);
     event NFTPriceSet(uint256 indexed tokenId, uint256 price);
     event NFTSold(address indexed buyer, uint256 indexed tokenId, uint256 price);
     event AuctionStarted(uint256 indexed tokenId, uint256 startingBid, uint256 auctionEndTime);
@@ -56,7 +56,7 @@ contract NFTCollection is ERC721URIStorage, Ownable {
         // Set royalty percentage for this specific NFT
         _tokenRoyalties[tokenId] = royaltyPercentage;
 
-        emit NFTMinted(recipient, tokenId, tokenURI, royaltyPercentage);
+        emit NFTMinted(recipient, tokenId, tokenURI, royaltyPercentage, address(this));
     }
 
     function setTokenPrice(uint256 tokenId, uint256 price) public onlyOwner {
