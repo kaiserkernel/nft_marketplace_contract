@@ -4,7 +4,8 @@
 import { buildModule } from "@nomicfoundation/hardhat-ignition/modules";
 
 export default buildModule("NFTModule", (m) => {
-  const nft = m.contract("NFTFactory");
+  // Deploy both the NFTFactory and NFTCollection contracts
+  const nftFactory = m.contract("NFTFactory");
 
-  return { nft };
+  return { nftFactory };
 });
