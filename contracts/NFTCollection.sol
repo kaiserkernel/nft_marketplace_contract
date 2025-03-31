@@ -153,7 +153,7 @@ contract NFTCollection is ERC721URIStorage, Ownable {
 
         address creator = _tokenCreators[tokenId];
 
-        uint256 royaltyAmount = (price * _tokenRoyalties[tokenId]) / 100000;
+        uint256 royaltyAmount = (price * _tokenRoyalties[tokenId]) / 100;
         uint256 deployerRoyaltyAmount = (price * deployerRoyalty) / 100000;
         uint256 sellerAmount = price - royaltyAmount - deployerRoyaltyAmount;
 
@@ -240,7 +240,7 @@ contract NFTCollection is ERC721URIStorage, Ownable {
         emit NewBidPlaced(msg.sender, tokenId, msg.value);
     }
 
-    function endAuction(uint256 tokenId) public {
+    function endAuction(uint256 tokenId) public returns (address, uint256) {
         require(ownerOf(tokenId) != address(0), "Token does not exist");
         require(
             block.timestamp >= _auctionEndTime[tokenId],
@@ -286,6 +286,8 @@ contract NFTCollection is ERC721URIStorage, Ownable {
         delete _auctionEndTime[tokenId];
         delete _tokenHighestBidder[tokenId];
         delete _tokenHighestBid[tokenId];
+
+        return (winner, winningBid);
     }
 
     function _baseURI() internal view override returns (string memory) {

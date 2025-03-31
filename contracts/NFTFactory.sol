@@ -1,15 +1,17 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
+import "@openzeppelin/contracts/access/Ownable.sol";
+
 import "./NFTCollection.sol";
 
-contract NFTFactory {
+contract NFTFactory is Ownable {
     uint256 private deployerRoyalty = 2250;
-    address private immutable deployerAddress;
+    // address private immutable deployerAddress;
 
     event CollectionCreated(
         address indexed owner,
-        address collectionAddress,
+        address indexed collectionAddress,
         string name,
         string symbol,
         string metadataURI
@@ -24,11 +26,11 @@ contract NFTFactory {
         uint256 deployerRoyalty;
     }
 
-    CollectionInfo[] public collections;
+    // CollectionInfo[] public collections;
+    mapping(address => CollectionInfo) public collections;
+    address[] private collectionAddresses;
 
-    constructor() {
-        deployerAddress = msg.sender; // Store deployer's address at contract deployment
-    }
+    constructor() Ownable(msg.sender) {}
 
     function createCollection(
         string memory name,
@@ -40,20 +42,20 @@ contract NFTFactory {
             symbol,
             metadataURI,
             msg.sender,
-            deployerAddress,
+            owner(), // Owner from Ownable
             deployerRoyalty
         );
 
-        collections.push(
-            CollectionInfo({
-                owner: msg.sender,
-                collectionAddress: address(newCollection),
-                name: name,
-                symbol: symbol,
-                metadataURI: metadataURI,
-                deployerRoyalty: deployerRoyalty
-            })
-        );
+        collections[address(newCollection)] = CollectionInfo({
+            owner: msg.sender,
+            collectionAddress: address(newCollection),
+            name: name,
+            symbol: symbol,
+            metadataURI: metadataURI,
+            deployerRoyalty: deployerRoyalty
+        });
+
+        collectionAddresses.push(address(newCollection));
 
         emit CollectionCreated(
             msg.sender,
@@ -69,18 +71,20 @@ contract NFTFactory {
         view
         returns (CollectionInfo[] memory)
     {
-        return collections;
+        uint256 length = collectionAddresses.length;
+        CollectionInfo[] memory result = new CollectionInfo[](length);
+
+        for (uint256 index = 0; index < length; index++) {
+            result[index] = collections[collectionAddresses[index]];
+        }
+        return result;
     }
 
     function getCollectionCount() external view returns (uint256) {
-        return collections.length;
+        return collectionAddresses.length;
     }
 
-    function setDeployerRoyalty(uint256 royalty) external {
-        require(
-            deployerAddress == msg.sender,
-            "Only deployer can set contract royalty"
-        );
+    function setDeployerRoyalty(uint256 royalty) external onlyOwner {
         require(royalty < 50, "Royalty for contract should be less than 50%");
         deployerRoyalty = royalty;
     }
